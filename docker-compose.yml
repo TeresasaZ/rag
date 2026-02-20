@@ -1,0 +1,35 @@
+# Allows different containers
+
+services:
+  vector_db:
+    image: qdrant/qdrant
+    container_name: vector_db
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - "./qdrant_storage:/qdrant/storage:z"
+    restart: unless-stopped
+
+  ingestion:
+    build: 
+      context: ./ingestion
+      dockerfile: Dockerfile
+    depends_on:
+      - vector_db
+    environment:
+      - QDRANT_URL=http://vector_db:6333
+      - COLLECTION_NAME=met-museum-artworks
+      - DATA_PATH=/app/data/met_museum_objects_full.json
+    volumes:
+      - ./data:/app/data
+
+  ollama: # offline AI
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - "./ollama_data:/root/.ollama"
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "-c", "ollama serve & sleep 5 && ollama pull tinyllama && wait"]
