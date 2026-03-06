@@ -1,10 +1,15 @@
 [project]
-name = "rag"
+name = "met-rag-demo"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "agent-framework-core @ git+https://github.com/microsoft/agent-framework.git@11628c3166a1845683c5aef1e0d389eb862bcbaa#subdirectory=python/packages/core",
+    "agent-framework-mem0 @ git+https://github.com/microsoft/agent-framework.git@11628c3166a1845683c5aef1e0d389eb862bcbaa#subdirectory=python/packages/core",    
+    "fastapi>=0.133.1",
     "ollama>=0.6.1",
-    "qdrant-client[fastembed]>=1.16.2",
+    "openai>=2.24.0",
+    "qdrant-client[fastembed]>=1.17.0",
+    "uvicorn>=0.41.0"
 ]
